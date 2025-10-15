@@ -11,8 +11,6 @@ class Member(ABC):
         self._membership_type = membership_type
         self._join_date = join_date
 
-    # геттеры сеттеры и инкапсуляция
-
     @property
     def member_id(self) -> int:
         return self._member_id
@@ -57,9 +55,7 @@ class Member(ABC):
         return f"Участник: {self._name}, Тип членства: {self._membership_type}"
     
     def __lt__(self, other: Member) -> bool:
-        """Сравнение участников по возрасту."""
         return self._age < other.age
 
     def __gt__(self, other: Member) -> bool:
-        """Сравнение участников по возрасту."""
         return self._age > other.age
