@@ -60,7 +60,6 @@ class Member(ABC):
     def __gt__(self, other: Member) -> bool:
         return self._age > other.age
 
-
 class Client(Member):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
@@ -83,7 +82,6 @@ class Client(Member):
     def __str__(self) -> str:
         return f"Клиент: {self._name}, Абонемент: {self._subscription}"
 
-
 class Trainer(Member):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
@@ -105,5 +103,3 @@ class Trainer(Member):
 
     def __str__(self) -> str:
         return f"Тренер: {self._name}, Специализация: {self._specialization}"
-    
-
