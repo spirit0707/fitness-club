@@ -59,3 +59,47 @@ class Member(ABC):
 
     def __gt__(self, other: Member) -> bool:
         return self._age > other.age
+
+class Client(Member):
+    
+    def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
+                 join_date: date, subscription: str):
+        super().__init__(member_id, name, age, membership_type, join_date)
+        self._subscription = subscription
+
+    @property
+    def subscription(self) -> str:
+        return self._subscription
+
+    @subscription.setter
+    def subscription(self, value: str):
+        self._subscription = value
+
+    def get_membership_info(self) -> str:
+        return f"Клиент: {self._name}, Абонемент: {self._subscription}, " \
+               f"Тип членства: {self._membership_type}, Дата вступления: {self._join_date}"
+
+    def __str__(self) -> str:
+        return f"Клиент: {self._name}, Абонемент: {self._subscription}"
+
+class Trainer(Member):
+    
+    def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
+                 join_date: date, specialization: str):
+        super().__init__(member_id, name, age, membership_type, join_date)
+        self._specialization = specialization
+
+    @property
+    def specialization(self) -> str:
+        return self._specialization
+
+    @specialization.setter
+    def specialization(self, value: str):
+        self._specialization = value
+
+    def get_membership_info(self) -> str:
+        return f"Тренер: {self._name}, Специализация: {self._specialization}, " \
+               f"Тип членства: {self._membership_type}, Дата вступления: {self._join_date}"
+
+    def __str__(self) -> str:
+        return f"Тренер: {self._name}, Специализация: {self._specialization}"
