@@ -1,6 +1,5 @@
 from abc import ABC
 from core.members import Trainer, Client
-from typing import List
 
 class Location:
     def __init__(self, room_name: str, capacity: int):
@@ -36,7 +35,7 @@ class GymClass(ABC):
         self._trainer = trainer
         self._schedule = schedule
         self._location = location
-        self._participants: List[Client] = []
+        self._participants: list[Client] = []
 
     @property
     def class_name(self) -> str:
