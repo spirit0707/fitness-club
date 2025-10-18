@@ -1,5 +1,5 @@
 from datetime import date
-from core.members import Trainer, Client
+from core.members import Member, MemberMeta, Trainer, Client
 from core.gym_class import GymClass, Location
 
 # тест пункта 1
@@ -36,3 +36,12 @@ yoga_class.add_participant(client2)
 
 print("Информация о занятии")
 print(yoga_class)
+
+# тест 6
+print("Реестр зарегистрированных подклассов:")
+print(MemberMeta.registry)
+
+member = Member.create("Trainer", 2, "Анна", 30, "Premium", date.today(), "Йога")
+
+print(member)
+print(member.get_membership_info())
