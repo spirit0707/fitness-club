@@ -1,17 +1,12 @@
 from datetime import date
-from core.members import Trainer, Client, Member
+from core.members import Trainer, Client
 from core.gym_class import GymClass, Location
 
 # тест пункта 1
-class TempMember(Member):
-    def get_membership_info(self) -> str:
-        return f"Временный участник {self.name}"
 
-m1 = TempMember(1, "Иван", 25, "Gold", date(2024, 10, 1))
-m2 = TempMember(2, "Анна", 30, "Silver", date(2024, 10, 1))
+m1 = Client(1, "Иван", 25, "Gold", date(2024, 10, 1), "Годовой")
+m2 = Client(2, "Анна", 30, "Silver", date(2024, 10, 1), "Годовой")
 
-print(m1)
-print(m2)
 print("Моложе ли Иван, чем Анна?", m1 < m2)
 print("Дата вступления:", m1.join_date)
 print(m1.get_membership_info())

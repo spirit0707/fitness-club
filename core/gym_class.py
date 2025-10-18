@@ -3,81 +3,81 @@ from core.members import Trainer, Client
 
 class Location:
     def __init__(self, room_name: str, capacity: int):
-        self._room_name = room_name
-        self._capacity = capacity
+        self.__room_name = room_name
+        self.__capacity = capacity
 
     @property
     def room_name(self) -> str:
-        return self._room_name
+        return self.__room_name
 
     @room_name.setter
     def room_name(self, value: str):
         if not value.strip():
             raise ValueError("Название зала не может быть пустым.")
-        self._room_name = value
+        self.__room_name = value
 
     @property
     def capacity(self) -> int:
-        return self._capacity
+        return self.__capacity
 
     @capacity.setter
     def capacity(self, value: int):
         if value <= 0:
             raise ValueError("Вместимость должна быть положительной.")
-        self._capacity = value
+        self.__capacity = value
 
     def __str__(self) -> str:
-        return f"Зал: {self._room_name} (вместимость: {self._capacity})"
+        return f"Зал: {self.__room_name} (вместимость: {self.__capacity})"
 
 class GymClass(ABC):
     def __init__(self, class_name: str, trainer: Trainer, schedule: str, location: Location):
-        self._class_name = class_name
-        self._trainer = trainer
-        self._schedule = schedule
-        self._location = location
-        self._participants: list[Client] = []
+        self.__class_name = class_name
+        self.__trainer = trainer
+        self.__schedule = schedule
+        self.__location = location
+        self.__participants: list[Client] = []
 
     @property
     def class_name(self) -> str:
-        return self._class_name
+        return self.__class_name
     
     @property
     def trainer(self) -> Trainer:
-        return self._trainer
+        return self.__trainer
     
     @property
     def schedule(self) -> str:
-        return self._schedule
+        return self.__schedule
     
     @schedule.setter
     def schedule(self, value: str):
-        self._schedule = value
+        self.__schedule = value
 
     @property
     def location(self) -> Location:
-        return self._location
+        return self.__location
     
     def add_participant(self, client: Client):
-        if len(self._participants) >= self._location.capacity:
+        if len(self.__participants) >= self.location.capacity:
             raise ValueError("Зал переполнен")
-        if client in self._participants:
+        if client in self.__participants:
             raise ValueError(f"{client.name} уже записан")
-        self._participants.append(client)
+        self.__participants.append(client)
 
     def remove_participant(self, client: Client):
-        if client not in self._participants:
+        if client not in self.__participants:
             raise ValueError(f"{client.name} не найден")
-        self._participants.remove(client)
+        self.__participants.remove(client)
 
     def get_participants(self) -> list[str]:
-        return [p.name for p in self._participants]
+        return [p.name for p in self.__participants]
     
     def __str__(self) -> str:
         return (
-            f"Занятие: {self._class_name}\n"
-            f"Тренер: {self._trainer.name}\n"
-            f"Расписание: {self._schedule}\n"
-            f"{self._location}\n"
+            f"Занятие: {self.class_name}\n"
+            f"Тренер: {self.trainer.name}\n"
+            f"Расписание: {self.schedule}\n"
+            f"{self.location}\n"
             f"Участники: {', '.join(self.get_participants()) or 'нет'}"
         )
     
