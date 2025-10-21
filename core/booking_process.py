@@ -2,10 +2,12 @@ from abc import ABC, abstractmethod
 from core.members import Client, Trainer
 from core.gym_class import GymClass
 from core.exceptions import ClassFullError
+from core.decorators import check_access
 from typing import Union
 
 class BookingProcess(ABC):
 
+    @check_access
     def book_class(self, member: Union[Client, Trainer], gym_class: GymClass) -> str:
         print(f"Запуск процесса записи для {member.name} на {gym_class.class_name}")
 

@@ -4,12 +4,13 @@ from datetime import date
 
 class Member(ABC):
 
-    def __init__(self, member_id: int, name: str, age: int, membership_type: str, join_date: date):
+    def __init__(self, member_id: int, name: str, age: int, membership_type: str, join_date: date, permission: int = 1):
         self.__member_id = member_id
         self.__name = name
         self.__age = age
         self.__membership_type = membership_type
         self.__join_date = join_date
+        self.__permission = permission
 
     @property
     def member_id(self) -> int:
@@ -46,6 +47,10 @@ class Member(ABC):
     @property
     def join_date(self) -> date:
         return self.__join_date
+    
+    @property
+    def permission(self) -> int:
+        return self.__permission
 
     @abstractmethod
     def get_membership_info(self) -> str:
@@ -63,8 +68,8 @@ class Member(ABC):
 class Client(Member):
 
     def __init__(self, member_id: int, name: str, age: int, membership_type: str,
-                 join_date: date, subscription: str):
-        super().__init__(member_id, name, age, membership_type, join_date)
+                 join_date: date, subscription: str, permission: int = 1):
+        super().__init__(member_id, name, age, membership_type, join_date, permission)
         self.__subscription = subscription
 
     @property
@@ -85,8 +90,8 @@ class Client(Member):
 class Trainer(Member):
 
     def __init__(self, member_id: int, name: str, age: int, membership_type: str,
-                 join_date: date, specialization: str):
-        super().__init__(member_id, name, age, membership_type, join_date)
+                 join_date: date, specialization: str, permission: str = 1):
+        super().__init__(member_id, name, age, membership_type, join_date, permission)
         self.__specialization = specialization
 
     @property

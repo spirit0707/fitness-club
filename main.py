@@ -3,7 +3,7 @@ from core.members import Trainer, Client
 from core.gym_class import GymClass, Location
 from core.handlers import Administrator, Manager, Director
 from core.exceptions import RenewalLimitExceededError
-from core.exceptions import RenewalLimitExceededError, ClassFullError
+from core.exceptions import RenewalLimitExceededError, ClassFullError, PermissionDeniedError
 from core.booking_process import ClientBookingProcess, TrainerBookingProcess
 
 # тест пункта 1
@@ -84,3 +84,11 @@ except ClassFullError as e:
 print("\nПроцесс 3: Назначение тренера")
 trainer_booking = TrainerBookingProcess()
 trainer_booking.book_class(trainer_9, pilates_class)
+
+# Тест пункта 10
+print()
+client10 = Client(13, "Петр Бесправный", 28, "Basic", date(2024, 9, 1), "Месячный", 0)
+try:
+    client_booking.book_class(client10, yoga_class)
+except PermissionDeniedError as e:
+    print(f"Ошибка: {e}")
