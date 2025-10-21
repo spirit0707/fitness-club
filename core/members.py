@@ -53,7 +53,7 @@ class Member(ABC):
 
     def __str__(self) -> str:
         return f"Участник: {self.name}, Тип членства: {self.membership_type}"
-    
+
     def __lt__(self, other: Member) -> bool:
         return self.age < other.age
 
@@ -61,8 +61,8 @@ class Member(ABC):
         return self.age > other.age
 
 class Client(Member):
-    
-    def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
+
+    def __init__(self, member_id: int, name: str, age: int, membership_type: str,
                  join_date: date, subscription: str):
         super().__init__(member_id, name, age, membership_type, join_date)
         self.__subscription = subscription
@@ -83,8 +83,8 @@ class Client(Member):
         return f"Клиент: {self.name}, Абонемент: {self.subscription}"
 
 class Trainer(Member):
-    
-    def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
+
+    def __init__(self, member_id: int, name: str, age: int, membership_type: str,
                  join_date: date, specialization: str):
         super().__init__(member_id, name, age, membership_type, join_date)
         self.__specialization = specialization
