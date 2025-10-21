@@ -2,6 +2,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from datetime import date
 
+from core.mixins import LoggingMixin, NotificationMixin
+
 class Member(ABC):
 
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, join_date: date):
@@ -60,12 +62,15 @@ class Member(ABC):
     def __gt__(self, other: Member) -> bool:
         return self._age > other.age
 
-class Client(Member):
+class Client(Member, LoggingMixin, NotificationMixin):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
                  join_date: date, subscription: str):
         super().__init__(member_id, name, age, membership_type, join_date)
         self._subscription = subscription
+
+        self.log_action("Создан новый клиент", 
+                       f"ID: {member_id}, Абонемент: {subscription}")
 
     @property
     def subscription(self) -> str:
@@ -73,7 +78,10 @@ class Client(Member):
 
     @subscription.setter
     def subscription(self, value: str):
+        old_subscription = self._subscription
         self._subscription = value
+        self.log_action("Изменен тип абонемента", 
+                       f"Было: {old_subscription}, Стало: {value}")
 
     def get_membership_info(self) -> str:
         return f"Клиент: {self._name}, Абонемент: {self._subscription}, " \
@@ -82,12 +90,15 @@ class Client(Member):
     def __str__(self) -> str:
         return f"Клиент: {self._name}, Абонемент: {self._subscription}"
 
-class Trainer(Member):
+class Trainer(Member, LoggingMixin, NotificationMixin):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
                  join_date: date, specialization: str):
         super().__init__(member_id, name, age, membership_type, join_date)
         self._specialization = specialization
+
+        self.log_action("Создан новый тренер",
+                       f"ID: {member_id}, Специализация: {specialization}")
 
     @property
     def specialization(self) -> str:
@@ -95,7 +106,10 @@ class Trainer(Member):
 
     @specialization.setter
     def specialization(self, value: str):
+        old_specialization = self._specialization
         self._specialization = value
+        self.log_action("Изменена специализация тренера",
+                       f"Было: {old_specialization}, Стало: {value}")
 
     def get_membership_info(self) -> str:
         return f"Тренер: {self._name}, Специализация: {self._specialization}, " \
