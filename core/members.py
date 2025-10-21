@@ -1,6 +1,9 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from datetime import date
+from datetime import date, time, datetime
+from json import dumps, loads
+
+SERIALIZATION_DIR = "data/"
 
 class Member(ABC):
 
@@ -64,6 +67,34 @@ class Member(ABC):
 
     def __gt__(self, other: Member) -> bool:
         return self.age > other.age
+    
+    def to_file(self) -> str:
+        data = self.to_dict()
+        filename = f"{SERIALIZATION_DIR}{data["member_id"]}.json"
+        with open(filename, "w") as file:
+            file.write(dumps(data))
+        return filename    
+
+    @abstractmethod
+    def to_dict(self) -> dict:
+        pass
+
+    @staticmethod
+    def from_file(filename: str) -> Member:
+        with open(filename, "r") as file:
+            data = loads(file.readline())
+            match data["obj_type"]:
+                case "Client":
+                    return Client.from_dict(data)
+                case "Trainer":
+                    return Trainer.from_dict(data)
+                case _:
+                    raise NotImplementedError()
+
+    @staticmethod
+    @abstractmethod
+    def from_dict(data: dict) -> Member:
+        pass
 
 class Client(Member):
 
@@ -86,6 +117,33 @@ class Client(Member):
 
     def __str__(self) -> str:
         return f"Клиент: {self.name}, Абонемент: {self.subscription}"
+    
+    def to_dict(self) -> dict:
+        return {
+            "obj_type": "Client",
+            "member_id": self.member_id,
+            "name": self.name,
+            "age": self.age,
+            "membership_type": self.membership_type,
+            "join_date": datetime.isoformat(datetime.combine(self.join_date, time())),
+            "subscription": self.subscription,
+            "permission": self.permission
+        }
+    
+    @staticmethod
+    def from_dict(data: dict) -> Client:
+        if (data["obj_type"] != "Client"):
+            raise TypeError()
+        
+        return Client(
+            data["member_id"],
+            data["name"],
+            data["age"],
+            data["membership_type"],
+            datetime.fromisoformat(data["join_date"]).date,
+            data["subscription"],
+            data["permission"]
+        )
 
 class Trainer(Member):
 
@@ -108,3 +166,30 @@ class Trainer(Member):
 
     def __str__(self) -> str:
         return f"Тренер: {self.name}, Специализация: {self.specialization}"
+    
+    def to_dict(self) -> dict:
+        return {
+            "obj_type": "Trainer",
+            "member_id": self.member_id,
+            "name": self.name,
+            "age": self.age,
+            "membership_type": self.membership_type,
+            "join_date": datetime.isoformat(datetime.combine(self.join_date, time())),
+            "specialization": self.specialization,
+            "permission": self.permission
+        }
+    
+    @staticmethod
+    def from_dict(data: dict) -> Trainer:
+        if (data["obj_type"] != "Trainer"):
+            raise TypeError()
+        
+        return Trainer(
+            data["member_id"],
+            data["name"],
+            data["age"],
+            data["membership_type"],
+            datetime.fromisoformat(data["join_date"]).date,
+            data["specialization"],
+            data["permission"]
+        )

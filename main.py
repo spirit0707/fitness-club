@@ -1,5 +1,5 @@
 from datetime import date
-from core.members import Trainer, Client
+from core.members import Trainer, Client, Member
 from core.gym_class import GymClass, Location
 from core.handlers import Administrator, Manager, Director
 from core.exceptions import RenewalLimitExceededError
@@ -92,3 +92,16 @@ try:
     client_booking.book_class(client10, yoga_class)
 except PermissionDeniedError as e:
     print(f"Ошибка: {e}")
+
+# Тест пункт 12
+print()
+client_file = client10.to_file()
+print(client_file)
+client12 = Member.from_file(client_file)
+print(client12)
+
+print()
+trainer_file = trainer.to_file()
+print(trainer_file)
+trainer12 = Member.from_file(trainer_file)
+print(trainer12)
