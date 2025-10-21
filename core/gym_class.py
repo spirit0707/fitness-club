@@ -40,15 +40,15 @@ class GymClass(ABC):
     @property
     def class_name(self) -> str:
         return self.__class_name
-    
+
     @property
     def trainer(self) -> Trainer:
         return self.__trainer
-    
+
     @property
     def schedule(self) -> str:
         return self.__schedule
-    
+
     @schedule.setter
     def schedule(self, value: str):
         self.__schedule = value
@@ -56,7 +56,7 @@ class GymClass(ABC):
     @property
     def location(self) -> Location:
         return self.__location
-    
+
     def add_participant(self, client: Client):
         if len(self.__participants) >= self.location.capacity:
             raise ValueError("Зал переполнен")
@@ -71,7 +71,7 @@ class GymClass(ABC):
 
     def get_participants(self) -> list[str]:
         return [p.name for p in self.__participants]
-    
+
     def __str__(self) -> str:
         return (
             f"Занятие: {self.class_name}\n"
@@ -80,4 +80,3 @@ class GymClass(ABC):
             f"{self.location}\n"
             f"Участники: {', '.join(self.get_participants()) or 'нет'}"
         )
-    
