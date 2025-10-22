@@ -1,5 +1,5 @@
 from datetime import date
-from core.members import Trainer, Client
+from core.members import Member, MemberMeta, Trainer, Client
 from core.gym_class import GymClass, Location
 from core.handlers import Administrator, Manager, Director
 from core.exceptions import RenewalLimitExceededError
@@ -84,3 +84,12 @@ except ClassFullError as e:
 print("\nПроцесс 3: Назначение тренера")
 trainer_booking = TrainerBookingProcess()
 trainer_booking.book_class(trainer_9, pilates_class)
+
+# тест 6
+print("Реестр зарегистрированных подклассов:")
+print(MemberMeta.registry)
+
+member = Member.create("Trainer", 2, "Анна", 30, "Premium", date.today(), "Йога")
+
+print(member)
+print(member.get_membership_info())
