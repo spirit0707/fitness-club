@@ -3,6 +3,8 @@ from abc import ABC, ABCMeta, abstractmethod
 from datetime import date, time, datetime
 from json import dumps, loads
 
+from core.mixins import LoggingMixin, NotificationMixin
+
 SERIALIZATION_DIR = "data/"
 
 class MemberMeta(ABCMeta):
@@ -112,12 +114,15 @@ class Member(ABC, metaclass=MemberMeta):
     def from_dict(data: dict) -> Member:
         pass
 
-class Client(Member):
+class Client(Member, LoggingMixin, NotificationMixin):
+    
+    def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
+                 join_date: date, subscription: str):
+        super().__init__(member_id, name, age, membership_type, join_date)
+        self._subscription = subscription
 
-    def __init__(self, member_id: int, name: str, age: int, membership_type: str,
-                 join_date: date, subscription: str, permission: int = 1):
-        super().__init__(member_id, name, age, membership_type, join_date, permission)
-        self.__subscription = subscription
+        self.log_action("Создан новый клиент", 
+                       f"ID: {member_id}, Абонемент: {subscription}")
 
     @property
     def subscription(self) -> str:
@@ -125,7 +130,10 @@ class Client(Member):
 
     @subscription.setter
     def subscription(self, value: str):
-        self.__subscription = value
+        old_subscription = self._subscription
+        self._subscription = value
+        self.log_action("Изменен тип абонемента", 
+                       f"Было: {old_subscription}, Стало: {value}")
 
     def get_membership_info(self) -> str:
      return f"Клиент: {self.name}, Абонемент: {self.subscription}, " \
@@ -161,12 +169,15 @@ class Client(Member):
             data["permission"]
         )
 
-class Trainer(Member):
+class Trainer(Member, LoggingMixin, NotificationMixin):
+    
+    def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
+                 join_date: date, specialization: str):
+        super().__init__(member_id, name, age, membership_type, join_date)
+        self._specialization = specialization
 
-    def __init__(self, member_id: int, name: str, age: int, membership_type: str,
-                 join_date: date, specialization: str, permission: str = 1):
-        super().__init__(member_id, name, age, membership_type, join_date, permission)
-        self.__specialization = specialization
+        self.log_action("Создан новый тренер",
+                       f"ID: {member_id}, Специализация: {specialization}")
 
     @property
     def specialization(self) -> str:
@@ -174,7 +185,10 @@ class Trainer(Member):
 
     @specialization.setter
     def specialization(self, value: str):
-        self.__specialization = value
+        old_specialization = self._specialization
+        self._specialization = value
+        self.log_action("Изменена специализация тренера",
+                       f"Было: {old_specialization}, Стало: {value}")
 
     def get_membership_info(self) -> str:
      return f"Тренер: {self.name}, Специализация: {self.specialization}, " \
