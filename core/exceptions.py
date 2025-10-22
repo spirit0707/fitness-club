@@ -10,3 +10,7 @@ class ClassFullError(Exception):
     def __init__(self, class_name: str):
         self.class_name = class_name
         super().__init__(f"Тренировка '{class_name}' переполнена. Превышена вместимость зала.")
+
+class PermissionDeniedError(Exception):
+    def __init__(self, func_name: str):
+        super().__init__(f"Недостаточно прав для выполнения '{func_name}'")
