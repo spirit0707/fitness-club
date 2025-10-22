@@ -1,4 +1,5 @@
 from datetime import date
+from core.factory import MemberFactory
 from core.members import Trainer, Client, Member, MemberMeta
 from core.gym_class import GymClass, Location
 from core.handlers import Administrator, Manager, Director
@@ -121,3 +122,11 @@ member = Member.create("Trainer", 2, "Анна", 30, "Premium", date.today(), "�
 
 print(member)
 print(member.get_membership_info())
+
+# тест 7
+print("паттерн фабрика:")
+client = MemberFactory.create_member("client", 13, "Петр Бесправный", 28, "Basic", date(2024, 9, 1), "Месячный", 0)
+print(client)
+ 
+trainer = MemberFactory.create_member("trainer", 14, "Анна Тренерова", 30, "Pro", date(2024, 8, 15), "Йога", 2)
+print(trainer)
