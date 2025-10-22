@@ -130,3 +130,13 @@ print(client)
  
 trainer = MemberFactory.create_member("trainer", 14, "Анна Тренерова", 30, "Pro", date(2024, 8, 15), "Йога", 2)
 print(trainer)
+
+# тест 13
+client1 = Client(1, "Иван", 25, "Базовый", date(2023, 5, 10), "Месячный")
+client2 = Client(2, "Мария", 25, "Базовый", date(2023, 5, 10), "Годовой")
+trainer = Trainer(3, "Олег", 30, "Премиум", date(2022, 8, 15), "Фитнес")
+
+print("client1 == client2:", client1 == client2)
+print("client1 < trainer:", client1 < trainer)
+print("trainer > client1:", trainer > client1)
+print("client1 < client2:", client1 < client2)   
