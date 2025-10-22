@@ -114,7 +114,7 @@ class Member(ABC, metaclass=MemberMeta):
     def from_dict(data: dict) -> Member:
         pass
 
-class Client(Member):
+class Client(Member, LoggingMixin, NotificationMixin):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
                  join_date: date, subscription: str):
@@ -130,7 +130,10 @@ class Client(Member):
 
     @subscription.setter
     def subscription(self, value: str):
+        old_subscription = self._subscription
         self._subscription = value
+        self.log_action("Изменен тип абонемента", 
+                       f"Было: {old_subscription}, Стало: {value}")
 
     def get_membership_info(self) -> str:
      return f"Клиент: {self.name}, Абонемент: {self.subscription}, " \
@@ -166,7 +169,7 @@ class Client(Member):
             data["permission"]
         )
 
-class Trainer(Member):
+class Trainer(Member, LoggingMixin, NotificationMixin):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
                  join_date: date, specialization: str):
@@ -182,7 +185,10 @@ class Trainer(Member):
 
     @specialization.setter
     def specialization(self, value: str):
+        old_specialization = self._specialization
         self._specialization = value
+        self.log_action("Изменена специализация тренера",
+                       f"Было: {old_specialization}, Стало: {value}")
 
     def get_membership_info(self) -> str:
      return f"Тренер: {self.name}, Специализация: {self.specialization}, " \
