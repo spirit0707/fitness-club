@@ -80,11 +80,23 @@ class Member(ABC, metaclass=MemberMeta):
     def __str__(self) -> str:
         return f"Участник: {self.name}, Тип членства: {self.membership_type}"
 
+    def _comparison_key(self):
+        return (self.age, self.join_date, self.member_id)
+
+    def __eq__(self, other: Member) -> bool:
+        if not isinstance(other, Member):
+            return NotImplemented
+        return self._comparison_key() == other._comparison_key()
+
     def __lt__(self, other: Member) -> bool:
-        return self.age < other.age
+        if not isinstance(other, Member):
+            return NotImplemented
+        return self._comparison_key() < other._comparison_key()
 
     def __gt__(self, other: Member) -> bool:
-        return self.age > other.age
+        if not isinstance(other, Member):
+            return NotImplemented
+        return self._comparison_key() > other._comparison_key()
     
     def to_file(self) -> str:
         data = self.to_dict()
