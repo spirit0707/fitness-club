@@ -1,6 +1,5 @@
 from datetime import date
-from core.members import Trainer, Client, Member
-from core.members import Member, MemberMeta, Trainer, Client
+from core.members import Trainer, Client, Member, MemberMeta
 from core.gym_class import GymClass, Location
 from core.handlers import Administrator, Manager, Director
 from core.exceptions import RenewalLimitExceededError, ClassFullError, PermissionDeniedError
