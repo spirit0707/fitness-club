@@ -117,9 +117,11 @@ class Member(ABC, metaclass=MemberMeta):
 class Client(Member, LoggingMixin, NotificationMixin):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
-                 join_date: date, subscription: str):
-        super().__init__(member_id, name, age, membership_type, join_date)
-        self._subscription = subscription
+                 join_date: date, subscription: str, permission: int = 1):
+        Member.__init__(self, member_id, name, age, membership_type, join_date, permission)
+        LoggingMixin.__init__(self)
+        NotificationMixin.__init__(self)
+        self.__subscription = subscription
 
         self.log_action("Создан новый клиент", 
                        f"ID: {member_id}, Абонемент: {subscription}")
@@ -130,8 +132,8 @@ class Client(Member, LoggingMixin, NotificationMixin):
 
     @subscription.setter
     def subscription(self, value: str):
-        old_subscription = self._subscription
-        self._subscription = value
+        old_subscription = self.__subscription
+        self.__subscription = value
         self.log_action("Изменен тип абонемента", 
                        f"Было: {old_subscription}, Стало: {value}")
 
@@ -172,9 +174,11 @@ class Client(Member, LoggingMixin, NotificationMixin):
 class Trainer(Member, LoggingMixin, NotificationMixin):
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
-                 join_date: date, specialization: str):
-        super().__init__(member_id, name, age, membership_type, join_date)
-        self._specialization = specialization
+                 join_date: date, specialization: str, permission: str = 1):
+        Member.__init__(self, member_id, name, age, membership_type, join_date, permission)
+        LoggingMixin.__init__(self)
+        NotificationMixin.__init__(self)
+        self.__specialization = specialization
 
         self.log_action("Создан новый тренер",
                        f"ID: {member_id}, Специализация: {specialization}")
@@ -185,8 +189,8 @@ class Trainer(Member, LoggingMixin, NotificationMixin):
 
     @specialization.setter
     def specialization(self, value: str):
-        old_specialization = self._specialization
-        self._specialization = value
+        old_specialization = self.__specialization
+        self.__specialization = value
         self.log_action("Изменена специализация тренера",
                        f"Было: {old_specialization}, Стало: {value}")
 
