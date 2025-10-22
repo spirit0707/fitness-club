@@ -1,5 +1,6 @@
 from datetime import date
 from core.members import Trainer, Client, Member
+from core.members import Member, MemberMeta, Trainer, Client
 from core.gym_class import GymClass, Location
 from core.handlers import Administrator, Manager, Director
 from core.exceptions import RenewalLimitExceededError
@@ -105,3 +106,11 @@ trainer_file = trainer.to_file()
 print(trainer_file)
 trainer12 = Member.from_file(trainer_file)
 print(trainer12)
+# тест 6
+print("Реестр зарегистрированных подклассов:")
+print(MemberMeta.registry)
+
+member = Member.create("Trainer", 2, "Анна", 30, "Premium", date.today(), "Йога")
+
+print(member)
+print(member.get_membership_info())

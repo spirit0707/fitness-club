@@ -4,8 +4,19 @@ from datetime import date, time, datetime
 from json import dumps, loads
 
 SERIALIZATION_DIR = "data/"
+from abc import ABC, ABCMeta, abstractmethod
+from datetime import date
 
-class Member(ABC):
+class MemberMeta(ABCMeta):
+    registry = {}
+
+    def __new__(mcs, name, bases, attrs):
+        cls = super().__new__(mcs, name, bases, attrs)
+        if name != "Member" and issubclass(cls, Member):
+            MemberMeta.registry[name] = cls
+        return cls
+
+class Member(ABC, metaclass=MemberMeta):
 
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, join_date: date, permission: int = 1):
         self.__member_id = member_id
@@ -54,6 +65,13 @@ class Member(ABC):
     @property
     def permission(self) -> int:
         return self.__permission
+
+    @classmethod
+    def create(cls, member_type: str, *args, **kwargs) -> Member:
+        member_class = MemberMeta.registry.get(member_type)
+        if member_class is None:
+            raise ValueError(f"Неизвестный тип участника: {member_type}")
+        return member_class(*args, **kwargs)
 
     @abstractmethod
     def get_membership_info(self) -> str:
