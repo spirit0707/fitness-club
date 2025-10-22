@@ -1,11 +1,9 @@
 from __future__ import annotations
-from abc import ABC, abstractmethod
+from abc import ABC, ABCMeta, abstractmethod
 from datetime import date, time, datetime
 from json import dumps, loads
 
 SERIALIZATION_DIR = "data/"
-from abc import ABC, ABCMeta, abstractmethod
-from datetime import date
 
 class MemberMeta(ABCMeta):
     registry = {}
