@@ -3,12 +3,30 @@ from core.members import Client, Trainer
 from core.gym_class import GymClass
 from core.exceptions import ClassFullError
 from core.decorators import check_access
+from core.interfaces import Bookable
 from typing import Union
 
-class BookingProcess(ABC):
+class BookingProcess(Bookable):
+    """Процесс записи на тренировку
+
+    Args:
+        Bookable
+
+    Returns:
+        str: подтверждение записи
+    """    
 
     @check_access
     def book_class(self, member: Union[Client, Trainer], gym_class: GymClass) -> str:
+        """Запуск процесса записи
+
+        Args:
+            member (Union[Client, Trainer]): кто записывается
+            gym_class (GymClass): куда записывается
+
+        Returns:
+            str: подтверждение записи
+        """
         print(f"Запуск процесса записи для {member.name} на {gym_class.class_name}")
 
         self._specific_availability_check(gym_class, member)
@@ -16,27 +34,65 @@ class BookingProcess(ABC):
         self._confirm_booking(member, gym_class)
 
         return f"Процесс записи для {member.name} завершен успешно."
-
+   
     @abstractmethod
     def _specific_availability_check(self, gym_class: GymClass, member: Union[Client, Trainer]):
+        """Проверка на доступность записи
+
+        Args:
+            gym_class (GymClass): куда записывается
+            member (Union[Client, Trainer]): кто записывается
+        """        
         pass
 
     @abstractmethod
     def _add_participant(self, member: Union[Client, Trainer], gym_class: GymClass):
+        """Добавление участника в тренировку
+
+        Args:
+            member (Union[Client, Trainer]): кто записывается
+            gym_class (GymClass): куда записывается
+        """
         pass
 
     def _confirm_booking(self, member: Union[Client, Trainer], gym_class: GymClass):
+        """Подтверждение записи
+
+        Args:
+            member (Union[Client, Trainer]): кто записывается
+            gym_class (GymClass): куда записывается
+        """
         print(f"3. Подтверждение: Участник {member.name} уведомлен о записи.")
 
 
 class ClientBookingProcess(BookingProcess):
+    """Процесс записи клиента
+
+    Args:
+        BookingProcess: базовый класс
+    """
 
     def _specific_availability_check(self, gym_class: GymClass, member: Client):
+        """Проверка на доступность записи
+
+        Args:
+            gym_class (GymClass): куда записывается
+            member (Client): кто записывается
+
+        Raises:
+            ClassFullError: мест нет
+        """
         if len(gym_class.get_participants()) >= gym_class.location.capacity:
             raise ClassFullError(gym_class.class_name)
         print("1. Проверка доступности: OK.")
 
     def _add_participant(self, client: Client, gym_class: GymClass):
+        """Добавление участника в тренировку
+
+        Args:
+            client (Client): кто записывается
+            gym_class (GymClass): куда записывается
+        """
         try:
             gym_class.add_participant(client)
             print(f"2. Добавление: Клиент {client.name} успешно записан в список.")
@@ -44,10 +100,27 @@ class ClientBookingProcess(BookingProcess):
             print(f"2. Добавление: {e}")
 
 class TrainerBookingProcess(BookingProcess):
+    """Процесс записи тренера
+
+    Args:
+        BookingProcess: базовый класс
+    """
 
     def _specific_availability_check(self, gym_class: GymClass, member: Trainer):
+        """Проверка доступности
+
+        Args:
+            gym_class (GymClass): куда записывается
+            member (Trainer): кто записывается
+        """
         print("1. Проверка доступности: Тренер не влияет на вместимость зала. OK.")
         pass
 
     def _add_participant(self, trainer: Trainer, gym_class: GymClass):
+        """Добавление участника в тренировку
+
+        Args:
+            trainer (Trainer): кто записывается
+            gym_class (GymClass): куда записывается
+        """
         print(f"2. Добавление: Тренер {trainer.name} назначен на тренировку.")
