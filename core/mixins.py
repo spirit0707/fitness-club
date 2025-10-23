@@ -56,7 +56,7 @@ class NotificationMixin:
         Args:
             notification (str): уведомление
         """
-        with open("notifications.txt", "a", encoding="utf-8") as f:
+        with open("data/notifications.txt", "a", encoding="utf-8") as f:
             f.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {notification}\n")
     
     def send_class_cancellation(self, class_name: str, reason: str = ""):

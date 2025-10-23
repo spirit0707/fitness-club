@@ -79,6 +79,21 @@ class GymClass(ABC):
             raise ValueError(f"{client.name} уже записан")
         self.__participants.append(client)
 
+        if hasattr(client, 'send_notification'):
+            client.send_notification(
+                "Успешная запись на тренировку",
+                f"Вы записаны на тренировку '{self.class_name}'. "
+                f"Тренер: {self.trainer.name}. Время: {self.schedule}",
+                "success"
+            )
+
+        if hasattr(self.trainer, 'send_notification'):
+            self.trainer.send_notification(
+                "Новый участник на тренировке",
+                f"Клиент {client.name} записался на вашу тренировку '{self.class_name}'",
+                "info"
+            )
+
     def remove_participant(self, client: Client):
         """Убрать клиента из списка участников
 
@@ -91,6 +106,13 @@ class GymClass(ABC):
         if client not in self.__participants:
             raise ValueError(f"{client.name} не найден")
         self.__participants.remove(client)
+
+        if hasattr(client, 'send_notification'):
+            client.send_notification(
+                "Отмена записи на тренировку",
+                f"Ваша запись на тренировку '{self.class_name}' отменена",
+                "warning"
+            )
 
     def get_participants(self) -> list[str]:
         """Получить список участников
