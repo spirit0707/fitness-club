@@ -15,8 +15,8 @@ print("Дата вступления:", m1.join_date)
 print(m1.get_membership_info())
 
 # тест пункта 2
-client = Client(1, "Иван Петров", 25, "Премиум", date(2023, 1, 15), "Годовой")
-trainer = Trainer(2, "Анна Сидорова", 30, "Персонал", date(2022, 5, 10), "Фитнес")
+client = Client(3, "Иван Петров", 25, "Премиум", date(2023, 1, 15), "Годовой")
+trainer = Trainer(4, "Анна Сидорова", 30, "Персонал", date(2022, 5, 10), "Фитнес")
 
 print(client.get_membership_info())
 print(client)
@@ -26,9 +26,9 @@ print(f"Клиент младше тренера: {client < trainer}")
 print(f"Тренер старше клиента: {trainer > client}")
 
 # тест пункта 3
-trainer = Trainer(1, "Анна", 30, "Staff", date(2020, 5, 1), "Йога")
-client1 = Client(2, "Иван", 25, "Premium", date(2024, 7, 1), "Йога")
-client2 = Client(3, "Мария", 28, "Basic", date(2024, 8, 1), "Йога")
+trainer = Trainer(5, "Анна", 30, "Staff", date(2020, 5, 1), "Йога")
+client1 = Client(6, "Иван", 25, "Premium", date(2024, 7, 1), "Йога")
+client2 = Client(7, "Мария", 28, "Basic", date(2024, 8, 1), "Йога")
 
 location = Location("Зал №3", capacity=10)
 
@@ -44,7 +44,7 @@ print(yoga_class)
 print("Реестр зарегистрированных подклассов:")
 print(MemberMeta.registry)
 
-member = Member.create("Trainer", 2, "Анна", 30, "Premium", date.today(), "Йога")
+member = Member.create("Trainer", 8, "Анна", 30, "Premium", date.today(), "Йога")
 
 print(member)
 print(member.get_membership_info())
@@ -118,23 +118,23 @@ print(trainer12)
 print("Реестр зарегистрированных подклассов:")
 print(MemberMeta.registry)
 
-member = Member.create("Trainer", 2, "Анна", 30, "Premium", date.today(), "Йога")
+member = Member.create("Trainer", 14, "Анна", 30, "Premium", date.today(), "Йога")
 
 print(member)
 print(member.get_membership_info())
 
 # тест 7
 print("паттерн фабрика:")
-client = MemberFactory.create_member("client", 13, "Петр Бесправный", 28, "Basic", date(2024, 9, 1), "Месячный", 0)
+client = MemberFactory.create_member("client", 15, "Петр Бесправный", 28, "Basic", date(2024, 9, 1), "Месячный", 0)
 print(client)
  
-trainer = MemberFactory.create_member("trainer", 14, "Анна Тренерова", 30, "Pro", date(2024, 8, 15), "Йога", 2)
+trainer = MemberFactory.create_member("trainer", 16, "Анна Тренерова", 30, "Pro", date(2024, 8, 15), "Йога", 2)
 print(trainer)
 
 # тест 13
-client1 = Client(1, "Иван", 25, "Базовый", date(2023, 5, 10), "Месячный")
-client2 = Client(2, "Мария", 25, "Базовый", date(2023, 5, 10), "Годовой")
-trainer = Trainer(3, "Олег", 30, "Премиум", date(2022, 8, 15), "Фитнес")
+client1 = Client(17, "Иван", 25, "Базовый", date(2023, 5, 10), "Месячный")
+client2 = Client(18, "Мария", 25, "Базовый", date(2023, 5, 10), "Годовой")
+trainer = Trainer(19, "Олег", 30, "Премиум", date(2022, 8, 15), "Фитнес")
 
 print("client1 == client2:", client1 == client2)
 print("client1 < trainer:", client1 < trainer)

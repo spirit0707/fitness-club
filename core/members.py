@@ -8,15 +8,37 @@ from core.mixins import LoggingMixin, NotificationMixin
 SERIALIZATION_DIR = "data/"
 
 class MemberMeta(ABCMeta):
+    """Участник тренировки (метакласс)
+
+    Args:
+        ABCMeta
+    """
     registry = {}
 
     def __new__(mcs, name, bases, attrs):
+        """Добавление класса-наследника в регистр
+
+        Args:
+            mcs
+            name
+            bases
+            attrs
+
+        Returns:
+            class
+        """
         cls = super().__new__(mcs, name, bases, attrs)
         if name != "Member" and issubclass(cls, Member):
             MemberMeta.registry[name] = cls
         return cls
 
 class Member(ABC, metaclass=MemberMeta):
+    """Участник тренировки
+
+    Args:
+        ABC
+        metaclass: Defaults to MemberMeta.
+    """
 
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, join_date: date, permission: int = 1):
         self.__member_id = member_id
@@ -68,6 +90,17 @@ class Member(ABC, metaclass=MemberMeta):
 
     @classmethod
     def create(cls, member_type: str, *args, **kwargs) -> Member:
+        """Создать участника по имени класса
+
+        Args:
+            member_type (str): название класса-наследника
+
+        Raises:
+            ValueError: Неизвестный тип участника
+
+        Returns:
+            Member
+        """
         member_class = MemberMeta.registry.get(member_type)
         if member_class is None:
             raise ValueError(f"Неизвестный тип участника: {member_type}")
@@ -75,6 +108,11 @@ class Member(ABC, metaclass=MemberMeta):
 
     @abstractmethod
     def get_membership_info(self) -> str:
+        """Получить информацию об участнике
+
+        Returns:
+            str
+        """
         pass
 
     def __str__(self) -> str:
@@ -99,6 +137,11 @@ class Member(ABC, metaclass=MemberMeta):
         return self._comparison_key() > other._comparison_key()
     
     def to_file(self) -> str:
+        """Запись сериализованных данных в файл
+
+        Returns:
+            str: имя файла с данными
+        """
         data = self.to_dict()
         filename = f"{SERIALIZATION_DIR}{data["member_id"]}.json"
         with open(filename, "w") as file:
@@ -107,10 +150,26 @@ class Member(ABC, metaclass=MemberMeta):
 
     @abstractmethod
     def to_dict(self) -> dict:
+        """Сериализация в словарь
+
+        Returns:
+            dict
+        """
         pass
 
     @staticmethod
     def from_file(filename: str) -> Member:
+        """Десериализация из файла
+
+        Args:
+            filename (str): название файла
+
+        Raises:
+            NotImplementedError
+
+        Returns:
+            Member
+        """
         with open(filename, "r") as file:
             data = loads(file.readline())
             match data["obj_type"]:
@@ -124,9 +183,19 @@ class Member(ABC, metaclass=MemberMeta):
     @staticmethod
     @abstractmethod
     def from_dict(data: dict) -> Member:
+        """Десериализация из словаря
+
+        Args:
+            data (dict)
+
+        Returns:
+            Member
+        """
         pass
 
 class Client(Member, LoggingMixin, NotificationMixin):
+    """Клиент
+    """
     
     def __init__(self, member_id: int, name: str, age: int, membership_type: str, 
                  join_date: date, subscription: str, permission: int = 1):
@@ -150,13 +219,23 @@ class Client(Member, LoggingMixin, NotificationMixin):
                        f"Было: {old_subscription}, Стало: {value}")
 
     def get_membership_info(self) -> str:
-     return f"Клиент: {self.name}, Абонемент: {self.subscription}, " \
-         f"Тип членства: {self.membership_type}, Дата вступления: {self.join_date}"
+        """Получить информацию о клиенте
+
+        Returns:
+            str
+        """
+        return f"Клиент: {self.name}, Абонемент: {self.subscription}, " \
+            f"Тип членства: {self.membership_type}, Дата вступления: {self.join_date}"
 
     def __str__(self) -> str:
         return f"Клиент: {self.name}, Абонемент: {self.subscription}"
     
     def to_dict(self) -> dict:
+        """Сериализация в словарь
+
+        Returns:
+            dict
+        """
         return {
             "obj_type": "Client",
             "member_id": self.member_id,
@@ -170,6 +249,14 @@ class Client(Member, LoggingMixin, NotificationMixin):
     
     @staticmethod
     def from_dict(data: dict) -> Client:
+        """Десериализация из словаря
+
+        Args:
+            data (dict)
+
+        Returns:
+            Member
+        """
         if (data["obj_type"] != "Client"):
             raise TypeError()
         
@@ -207,13 +294,23 @@ class Trainer(Member, LoggingMixin, NotificationMixin):
                        f"Было: {old_specialization}, Стало: {value}")
 
     def get_membership_info(self) -> str:
-     return f"Тренер: {self.name}, Специализация: {self.specialization}, " \
-         f"Тип членства: {self.membership_type}, Дата вступления: {self.join_date}"
+        """Получить информацию о тренере
+
+        Returns:
+            str
+        """
+        return f"Тренер: {self.name}, Специализация: {self.specialization}, " \
+            f"Тип членства: {self.membership_type}, Дата вступления: {self.join_date}"
 
     def __str__(self) -> str:
         return f"Тренер: {self.name}, Специализация: {self.specialization}"
     
     def to_dict(self) -> dict:
+        """Сериализация в словарь
+
+        Returns:
+            dict
+        """
         return {
             "obj_type": "Trainer",
             "member_id": self.member_id,
@@ -227,6 +324,14 @@ class Trainer(Member, LoggingMixin, NotificationMixin):
     
     @staticmethod
     def from_dict(data: dict) -> Trainer:
+        """Десериализация из словаря
+
+        Args:
+            data (dict)
+
+        Returns:
+            Member
+        """
         if (data["obj_type"] != "Trainer"):
             raise TypeError()
         

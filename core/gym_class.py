@@ -2,6 +2,8 @@ from abc import ABC
 from core.members import Trainer, Client
 
 class Location:
+    """Место проведения тренировки
+    """
     def __init__(self, room_name: str, capacity: int):
         self.__room_name = room_name
         self.__capacity = capacity
@@ -30,6 +32,11 @@ class Location:
         return f"Зал: {self.__room_name} (вместимость: {self.__capacity})"
 
 class GymClass(ABC):
+    """Тренировка
+
+    Args:
+        ABC
+    """
     def __init__(self, class_name: str, trainer: Trainer, schedule: str, location: Location):
         self.__class_name = class_name
         self.__trainer = trainer
@@ -58,6 +65,14 @@ class GymClass(ABC):
         return self.__location
 
     def add_participant(self, client: Client):
+        """Добавить клиента в список участников
+
+        Args:
+            client (Client): кого добавить
+
+        Raises:
+            ValueError: зал переполнен или клиент уже записан
+        """
         if len(self.__participants) >= self.location.capacity:
             raise ValueError("Зал переполнен")
         if client in self.__participants:
@@ -65,11 +80,24 @@ class GymClass(ABC):
         self.__participants.append(client)
 
     def remove_participant(self, client: Client):
+        """Убрать клиента из списка участников
+
+        Args:
+            client (Client): кого убрать
+
+        Raises:
+            ValueError: клиент не найден
+        """
         if client not in self.__participants:
             raise ValueError(f"{client.name} не найден")
         self.__participants.remove(client)
 
     def get_participants(self) -> list[str]:
+        """Получить список участников
+
+        Returns:
+            list[str]: имена клиентов на тренировке
+        """
         return [p.name for p in self.__participants]
 
     def __str__(self) -> str:
